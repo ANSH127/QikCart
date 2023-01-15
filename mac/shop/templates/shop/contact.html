@@ -36,3 +36,14 @@ margin-bottom:5px
 
 </div>
 {% endblock %}
+
+{%block js %}
+<script>
+{% if status %}
+alert('Submited Successfully')
+document.location='/shop'
+{% endif %}
+
+</script>
+
+{% endblock %}

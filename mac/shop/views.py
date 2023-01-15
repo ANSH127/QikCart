@@ -1,8 +1,10 @@
 import math
-
+import json
 from django.shortcuts import render
 from django.http import HttpResponse
-from . models import Product,Contact
+from . models import Product,Contact,Orders,OrderUpdate
+import datetime
+
 # Create your views here.
 def index(request):
     # products=Product.objects.all()
@@ -41,10 +43,33 @@ def contact(request):
         # print(name,email,phone,desc)
         contact=Contact(name=name,email=email,phone=phone,desc=desc)
         contact.save()
+        status=True
+        return render(request, 'shop/contact.html',{'status':status})
+
     return render(request, 'shop/contact.html')
 
 
 def tracker(request):
+    if request.method == "POST":
+        orderid = request.POST.get('orderid', '')
+        email = request.POST.get('email', '')
+
+        try:
+            order=Orders.objects.filter(order_id=orderid,email=email)
+            if len(order)>0:
+                Update=OrderUpdate.objects.filter(order_id=orderid)
+                updates=[]
+                
+                for item in Update:
+
+                    updates.append({'text':item.update_desc,'time':item.timestamp})
+                    response=json.dumps(updates,default=str)
+                return HttpResponse(response)
+            else:
+                return HttpResponse('{}')
+        except Exception as e:
+            return HttpResponse('{}')
+
     return render(request, 'shop/tracker.html')
 
 
@@ -60,5 +85,26 @@ def productView(request,myid):
 
 
 def checkout(request):
+    if request.method == "POST":
+        # print(request)
+        item=request.POST.get('itemsJson','')
+        name = request.POST.get('name', '')
+        lname = request.POST.get('lname', '')
+        email = request.POST.get('email', '')
+        address1 = request.POST.get('address1', '')
+        address2 = request.POST.get('address2', '')
+        phone = request.POST.get('phone', '')
+        city = request.POST.get('city', '')
+        state = request.POST.get('state', '')
+        zip_code = request.POST.get('zip_code', '')
+        # print(name,email,phone,desc)
+        order = Orders(items_json=item,name=name,lname=lname, email=email, phone=phone,address=address1,
+                       address2=address2,city=city,state=state,zip_code=zip_code)
+        order.save()
+        update=OrderUpdate(order_id=order.order_id,update_desc="The order has been placed")
+        update.save()
+        thank=True
+        id=order.order_id
+        return render(request, 'shop/checkout.html',{'thank':thank,'id':id})
     return render(request, 'shop/checkout.html')
 
