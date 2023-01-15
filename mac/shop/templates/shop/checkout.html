@@ -1,0 +1,104 @@
+{% extends 'shop/basic.html' %}
+{% block title %}Checkout-My Awesome Cart{% endblock %}
+{% block body %}
+<!-- <h3>this is checkout page</h3> -->
+<div class="container my-4">
+  <div class="col">
+    <h2>Step 1- My Awesome Cart Express Checkout-Review Your Cart Items</h2>
+    <div>
+      <ol class="list-group list-group-numbered" id="items">
+
+      </ol>
+    </div>
+  </div>
+  <div class="col my-4">
+    <h2>Step 2- Enter Your Address and other details</h2>
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label for="inputname1" class="form-label">First Name</label>
+        <input type="name" class="form-control" id="inputname1" placeholder="First Name">
+      </div>
+      <div class="col-md-6">
+        <label for="inputname" class="form-label">Last Name</label>
+        <input type="name" class="form-control" id="inputname" placeholder="Last Name">
+      </div>
+      <div class="col-12">
+        <label for="inputEmail4" class="form-label">Email</label>
+        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+      </div>
+      <div class="col-12">
+        <label for="inputphone" class="form-label">Phone</label>
+        <input type="tel" class="form-control" id="inputphone" placeholder="Phone Number">
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Address</label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+      </div>
+      <div class="col-12">
+        <label for="inputAddress2" class="form-label">Address Line 2</label>
+        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+      </div>
+      <div class="col-md-6">
+        <label for="inputCity" class="form-label">City</label>
+        <input type="text" class="form-control" id="inputCity">
+      </div>
+      <div class="col-md-4">
+        <label for="inputState" class="form-label">State</label>
+        <select id="inputState" class="form-select">
+          <option selected>Select</option>
+          <option>UP</option>
+          <option>UK</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="inputZip" class="form-label">Zip</label>
+        <input type="text" class="form-control" id="inputZip">
+      </div>
+      <div class="col-12">
+        <button type="submit" id="ord" class="btn btn-primary" >Place Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{%block js %}
+<script>
+  if (localStorage.getItem('cart') == null) {
+    var cart = {};
+
+  }
+  else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+
+
+  }
+  console.log(cart)
+  // let sum=0
+  let mystr1 = ""
+  if ($.isEmptyObject(cart)) {
+    document.getElementById('items').innerHTML = "<h4 class='text-center mx-4' style='color:red';>Your Cart is Empty!</h4>";
+    document.getElementById('ord').setAttribute('disabled','false')
+
+  }
+  else {
+    for (var item in cart) {
+      let name = cart[item][1];
+      let qty = cart[item][0];
+      mystr = `<li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">${name}</div>
+            </div>
+          <span class="badge bg-primary rounded-pill">${qty}</span>
+        </li>
+        `
+      mystr1 = mystr1 + mystr
+    }
+    document.getElementById('items').innerHTML = mystr1;
+    document.getElementById('cart').innerHTML = Object.keys(cart).length;
+
+  }
+
+</script>
+{% endblock %}

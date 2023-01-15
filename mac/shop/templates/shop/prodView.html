@@ -1,0 +1,57 @@
+{% extends 'shop/basic.html' %}
+{% block title %}{{product.product_name}}-My Awesome Cart{% endblock %}
+{% block body %}
+<!--<h3>this is ProductView page</h3>-->
+<div class="container my-4">
+    <div class="row">
+    <div class="col-md-4">
+    <div class="row">
+        <img src="/media/{{product.image}}">
+    </div>
+        <div class="coloumn text-center">
+            <button class="btn btn-primary my-2">Buy Now</button>
+            <button class="btn btn-primary">Add to Cart</button>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h5>{{product.product_name}}</h5>
+        <h4><b> Rs.{{product.price}}</h4>
+        <p>{{product.desc}}</p>
+    </div>
+        </div>
+</div>
+
+{% endblock %}
+
+{%block js %}
+<script>
+
+    console.log("working")
+    if(localStorage.getItem('cart')==null){
+    var cart={};
+
+    }
+    else{
+    cart=JSON.parse(localStorage.getItem('cart'))
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+
+    }
+    $('.cart').click(function(){
+    var idstr=this.id.toString();
+
+    console.log(idstr);
+    if(cart[idstr]!=undefined){
+    cart[idstr]=cart[idstr]+1
+    }
+    else{
+    cart[idstr]=1;
+    }
+    console.log(cart)
+    localStorage.setItem('cart',JSON.stringify(cart));
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+    });
+    const exampleEl = document.getElementById('popcart')
+    const popover = new bootstrap.Popover(exampleEl,{ content: "<h5>Cart for your items in my shopping cart</h5>",html:true})
+
+</script>
+{% endblock %}
