@@ -10,6 +10,11 @@
 
       </ol>
     </div>
+    <nav aria-label="breadcrumb " style="background-color: antiquewhite;">
+      <ol class="breadcrumb mt-3 py-2">
+        <li class="breadcrumb-item active mx-2" aria-current="page">Total Amount - <b><span id="amt"></span></b></li>
+      </ol>
+    </nav>
   </div>
   <div class="col my-4">
     <h2>Step 2- Enter Your Address and other details</h2>
@@ -116,9 +121,12 @@
 
   }
   else {
+    let sum=0
     for (var item in cart) {
       let name = cart[item][1];
       let qty = cart[item][0];
+      let price=cart[item][2];
+      sum=sum+(qty)*(price)
       mystr = `<li class="list-group-item d-flex justify-content-between align-items-start">
           <div class="ms-2 me-auto">
             <div class="fw-bold">${name}</div>
@@ -128,6 +136,8 @@
         `
       mystr1 = mystr1 + mystr
     }
+    console.log(sum)
+    document.getElementById('amt').innerHTML = sum;
     document.getElementById('items').innerHTML = mystr1;
     document.getElementById('cart').innerHTML = Object.keys(cart).length;
     document.getElementById('itemsJson').value=JSON.stringify(cart);

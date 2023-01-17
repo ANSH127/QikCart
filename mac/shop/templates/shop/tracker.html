@@ -9,7 +9,7 @@
 
             <div class="col-md-6">
                 <label for="orderid" class="form-label">Order Id</label>
-                <input type="text" class="form-control" id="orderid" name="orderid" placeholder="First Name">
+                <input type="text" class="form-control" id="orderid" name="orderid" placeholder="Id">
             </div>
             <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
@@ -23,6 +23,15 @@
                 <h2>Your Order Status</h2>
                 <div class="my-4">
                     <ul class="list-group" id="items">
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col my-4">
+                <span id="odetail"></span>
+                <div class="my-4">
+                    <ul class="list-group" id="citems">
 
                     </ul>
                 </div>
@@ -53,8 +62,10 @@
                     .done(function (data) {
 
                         console.log(data)
-                        updates = JSON.parse(data);
-                        if (updates.length > 0 & updates != {}) {
+                        data = JSON.parse(data)
+                        updates = data[0];
+                        console.log(updates)
+                        if (data.length > 0 & updates != {}) {
                             for (i = 0; i < updates.length; i++) {
                                 let text = updates[i]['text'];
                                 let time = updates[i]['time'];
@@ -68,8 +79,30 @@
                                 $('#items').append(mystr)
 
                             }
+
+                        cart =JSON.parse(data[1])
+                        console.log(cart)
+                        let mystr1 = ""
+                        document.getElementById('odetail').innerHTML='<h2>Your Order Details</h2>'
+                        for (var item in cart) {
+                            console.log(item)
+                            let name = cart[item][1];
+                            let qty = cart[item][0];
+                            mystr = `<li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                             <div class="fw-bold">${name}</div>
+                            </div>
+                         <span class="badge bg-primary rounded-pill">${qty}</span>
+                        </li>
+                        `
+                            mystr1 = mystr1 + mystr
                         }
-                        else{
+                        document.getElementById('citems').innerHTML = mystr1;
+
+
+
+                        }
+                        else {
                             mystr = `<li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                  <div class="fw-bold">Sorry,We are not able to fetch this order id and email.Make sure to type correct email id and order id</div>
@@ -77,8 +110,35 @@
                                 </li>
                                  `
                             $('#items').append(mystr)
+                        document.getElementById('citems').innerHTML = '';
+                        document.getElementById('odetail').innerHTML=''
+
+
 
                         }
+
+                        // fill in the order details
+                        // cart =JSON.parse(data[1])
+                        // console.log(cart)
+                        // let mystr1 = ""
+                        // document.getElementById('odetail').innerHTML='<h2>Your Order Details</h2>'
+                        // for (var item in cart) {
+                        //     console.log(item)
+                        //     let name = cart[item][1];
+                        //     let qty = cart[item][0];
+                        //     mystr = `<li class="list-group-item d-flex justify-content-between align-items-start">
+                        // <div class="ms-2 me-auto">
+                        //      <div class="fw-bold">${name}</div>
+                        //     </div>
+                        //  <span class="badge bg-primary rounded-pill">${qty}</span>
+                        // </li>
+                        // `
+                        //     mystr1 = mystr1 + mystr
+                        // }
+                        // document.getElementById('citems').innerHTML = mystr1;
+
+
+
                     });
                 event.preventDefault();
             })

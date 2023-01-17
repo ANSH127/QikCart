@@ -59,11 +59,22 @@ def tracker(request):
             if len(order)>0:
                 Update=OrderUpdate.objects.filter(order_id=orderid)
                 updates=[]
-                
-                for item in Update:
+                def timeformat(value,value2):
+                    value=str(value)
+                    value2=str(value2)
+                    yy=value[:4]
+                    mm=value[5:7]
+                    dd=value[8:]
+                    TT=value2[:8]
+                    # print(TT)
+                    x=datetime.datetime(int(yy),int(mm),int(dd))
+                    return(x.strftime("%a %b %d %Y")+" "+TT)
 
-                    updates.append({'text':item.update_desc,'time':item.timestamp})
-                    response=json.dumps(updates,default=str)
+                for item in Update:
+                    # timeformat(item.timestamp,item.timefield)
+                    # print(item.timefield)
+                    updates.append({'text':item.update_desc,'time':timeformat(item.timestamp,item.timefield)})
+                    response=json.dumps([updates,order[0].items_json],default=str)
                 return HttpResponse(response)
             else:
                 return HttpResponse('{}')
