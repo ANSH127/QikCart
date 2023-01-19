@@ -20,6 +20,7 @@
     <h2>Step 2- Enter Your Address and other details</h2>
     <form class="row g-3" method="post" action="/shop/checkout/">{% csrf_token %} 
       <input type="hidden" name="itemsJson" id="itemsJson">
+      <input type="hidden" name="amount" id="amount">
       <div class="col-md-6">
         <label for="name" class="form-label">First Name</label>
         <input type="text" class="form-control" id="name" name="name" placeholder="First Name">
@@ -141,6 +142,7 @@
     document.getElementById('items').innerHTML = mystr1;
     document.getElementById('cart').innerHTML = Object.keys(cart).length;
     document.getElementById('itemsJson').value=JSON.stringify(cart);
+    document.getElementById('amount').value=sum;
     {% if thank %}
     alert('Thanks for ordering with us.Your order id is {{id}}.Use it to Track Your Order')
     localStorage.clear();
